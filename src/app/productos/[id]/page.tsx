@@ -6,13 +6,14 @@ import { getProductById } from "@/lib/products"
 import { notFound } from "next/navigation"
 
 interface ProductDetailPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-export default function ProductDetailPage({ params }: ProductDetailPageProps) {
-  const product = getProductById(params.id)
+export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+  const { id } = await params
+  const product = getProductById(id)
 
   if (!product) {
     notFound()
