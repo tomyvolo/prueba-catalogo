@@ -1,13 +1,22 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, ShoppingCart, Heart } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react' // Se eliminaron ShoppingCart y Heart
 import Navigation from "@/components/navigation"
 import { getProductByIdFromDB } from "@/lib/supabase" // Asegúrate de que esta ruta sea correcta
 import { notFound } from "next/navigation"
 
+// Definimos la interfaz de las props de la página de forma explícita
+// Esto es lo que Next.js App Router espera para rutas dinámicas
+interface ProductPageProps {
+  params: {
+    id: string;
+  };
+  // Next.js también puede pasar searchParams, aunque no los usemos aquí
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
 // La función de la página debe ser asíncrona
-// Definimos el tipo de 'params' directamente en la desestructuración
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
+export default async function ProductDetailPage({ params }: ProductPageProps) {
   // Obtener el ID del producto de los parámetros
   const productId = params.id
 
@@ -73,23 +82,13 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
               </div>
             )}
 
-            <div className="space-y-4">
-              <button className="w-full bg-gray-900 text-white py-4 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-300 flex items-center justify-center">
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                Agregar al carrito
-              </button>
-
-              <button className="w-full border border-gray-300 text-gray-900 py-4 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center">
-                <Heart className="h-5 w-5 mr-2" />
-                Agregar a favoritos
-              </button>
-            </div>
+            {/* Los botones de carrito y favoritos han sido eliminados */}
 
             <div className="border-t pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Información del producto</h3>
               <ul className="space-y-2 text-gray-600">
                 <li>• Material de alta calidad</li>
-                <li>• Envío gratis en compras superiores a $5000</li>
+                {/* La línea de envío gratis ha sido eliminada */}
                 <li>• Cambios y devoluciones sin cargo</li>
                 <li>• Garantía de satisfacción</li>
               </ul>
