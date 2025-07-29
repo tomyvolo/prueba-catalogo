@@ -2,22 +2,30 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, ShoppingCart, Heart } from 'lucide-react'
 import Navigation from "@/components/navigation"
-import { getProductByIdFromDB } from "@/lib/supabase" // Importa desde supabase.ts
+import { getProductByIdFromDB } from "@/lib/supabase"
 import { notFound } from "next/navigation"
 
+// Definición de la interfaz para las props de la página
 interface ProductDetailPageProps {
   params: {
     id: string
   }
 }
 
-export default async function ProductDetailPage({ params }: ProductDetailPageProps) { // Hacerla async
-  const product = await getProductByIdFromDB(params.id) // Obtener producto de la DB
+// La función de la página debe ser asíncrona
+export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+  // Obtener el ID del producto de los parámetros
+  const productId = params.id
 
+  // Obtener el producto de la base de datos
+  const product = await getProductByIdFromDB(productId)
+
+  // Si el producto no se encuentra, mostrar la página 404
   if (!product) {
     notFound()
   }
 
+  // Mapeo de nombres de categorías para mostrar
   const categoryNames = {
     remeras: "Remeras",
     buzos: "Buzos",
@@ -38,9 +46,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         </Link>
 
         <div className="grid md:grid-cols-2 gap-12">
+          {/* Sección de la imagen del producto */}
           <div className="aspect-square overflow-hidden rounded-lg bg-white shadow-sm">
             <Image
-              src={product.image_url || "/placeholder.svg"} // Usar image_url
+              src={product.image_url || "/placeholder.svg"} // Usar image_url de la DB
               alt={product.name}
               width={600}
               height={600}
@@ -48,9 +57,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             />
           </div>
 
+          {/* Sección de detalles del producto */}
           <div className="space-y-6">
             <div>
-              <p className="text-sm text-gray-500 mb-2">{categoryNames[product.category]}</p>
+              <p className="text-sm text-gray-500 mb-2">{categoryNames[product.category as keyof typeof categoryNames]}</p>
               <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
               <p className="text-3xl font-bold text-gray-900">${product.price.toLocaleString()}</p>
             </div>
@@ -69,23 +79,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               </div>
             )}
 
-            <div className="space-y-4">
-              <button className="w-full bg-gray-900 text-white py-4 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-300 flex items-center justify-center">
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                Agregar al carrito
-              </button>
-
-              <button className="w-full border border-gray-300 text-gray-900 py-4 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center">
-                <Heart className="h-5 w-5 mr-2" />
-                Agregar a favoritos
-              </button>
-            </div>
-
             <div className="border-t pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Información del producto</h3>
               <ul className="space-y-2 text-gray-600">
                 <li>• Material de alta calidad</li>
-                <li>• Envío gratis en compras superiores a $5000</li>
                 <li>• Cambios y devoluciones sin cargo</li>
                 <li>• Garantía de satisfacción</li>
               </ul>
