@@ -2,22 +2,12 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, ShoppingCart, Heart } from 'lucide-react'
 import Navigation from "@/components/navigation"
-import { getProductByIdFromDB } from "@/lib/supabase"
+import { getProductByIdFromDB } from "@/lib/supabase" // Asegúrate de que esta ruta sea correcta
 import { notFound } from "next/navigation"
 
-// Definición de la interfaz para las props de la página
-// Usamos Partial<PageProps> para ser más flexibles con Next.js 15
-interface ProductDetailPageProps {
-  params: {
-    id: string
-  }
-  // Next.js 15 puede pasar otras props como searchParams, etc.
-  // Aunque no las usemos, es bueno tenerlas en cuenta para la compatibilidad de tipos.
-  searchParams?: { [key: string]: string | string[] | undefined }
-}
-
 // La función de la página debe ser asíncrona
-export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+// Definimos el tipo de 'params' directamente en la desestructuración
+export default async function ProductDetailPage({ params }: { params: { id: string } }) {
   // Obtener el ID del producto de los parámetros
   const productId = params.id
 
