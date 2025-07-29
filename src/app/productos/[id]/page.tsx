@@ -2,18 +2,17 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, ShoppingCart, Heart } from 'lucide-react'
 import Navigation from "@/components/navigation"
-import { getProductById } from "@/lib/products"
+import { getProductByIdFromDB } from "@/lib/supabase" // Importa desde supabase.ts
 import { notFound } from "next/navigation"
 
 interface ProductDetailPageProps {
-  params: Promise<{
+  params: {
     id: string
-  }>
+  }
 }
 
-export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
-  const { id } = await params
-  const product = getProductById(id)
+export default async function ProductDetailPage({ params }: ProductDetailPageProps) { // Hacerla async
+  const product = await getProductByIdFromDB(params.id) // Obtener producto de la DB
 
   if (!product) {
     notFound()
@@ -41,7 +40,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         <div className="grid md:grid-cols-2 gap-12">
           <div className="aspect-square overflow-hidden rounded-lg bg-white shadow-sm">
             <Image
-              src={product.image || "/placeholder.svg"}
+              src={product.image_url || "/placeholder.svg"} // Usar image_url
               alt={product.name}
               width={600}
               height={600}
@@ -70,10 +69,23 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               </div>
             )}
 
+            <div className="space-y-4">
+              <button className="w-full bg-gray-900 text-white py-4 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-300 flex items-center justify-center">
+                <ShoppingCart className="h-5 w-5 mr-2" />
+                Agregar al carrito
+              </button>
+
+              <button className="w-full border border-gray-300 text-gray-900 py-4 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center">
+                <Heart className="h-5 w-5 mr-2" />
+                Agregar a favoritos
+              </button>
+            </div>
+
             <div className="border-t pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Información del producto</h3>
               <ul className="space-y-2 text-gray-600">
                 <li>• Material de alta calidad</li>
+                <li>• Envío gratis en compras superiores a $5000</li>
                 <li>• Cambios y devoluciones sin cargo</li>
                 <li>• Garantía de satisfacción</li>
               </ul>

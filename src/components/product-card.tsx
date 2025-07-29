@@ -1,6 +1,6 @@
 import Image from "next/image"
-import Link from "next/link"
-import type { Product } from "@/lib/products"
+import Link from "next/link" // <-- Asegúrate de que esté importado
+import type { Product } from "@/lib/supabase" // Ahora es de supabase
 
 interface ProductCardProps {
   product: Product
@@ -12,7 +12,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
         <div className="aspect-square overflow-hidden">
           <Image
-            src={product.image || "/placeholder.svg"}
+            src={product.image_url || "/placeholder.svg"}
             alt={product.name}
             width={400}
             height={400}

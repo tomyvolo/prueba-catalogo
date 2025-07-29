@@ -10,7 +10,7 @@ export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navItems = [
-    { href: "/productos", label: "Todos los Productos" },
+    { href: "/productos", label: "Todos los Productos" }, // <-- Ahora apunta a /productos
     { href: "/productos/remeras", label: "Remeras" },
     { href: "/productos/buzos", label: "Buzos" },
     { href: "/productos/pantalones", label: "Pantalones" },
@@ -20,7 +20,7 @@ export default function Navigation() {
     <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="text-2xl font-bold text-gray-900">
+          <Link href="/" className="text-2xl font-bold text-gray-900"> {/* <-- Este link vuelve a la portada */}
             Misuri
           </Link>
 
