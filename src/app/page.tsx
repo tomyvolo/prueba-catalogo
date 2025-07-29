@@ -9,7 +9,7 @@ export default function HomePage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-20 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">Mi Marca de Ropa</h1>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">Misuri</h1>
           <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
             Descubre nuestra colección de ropa moderna y cómoda. Calidad premium para tu estilo de vida.
           </p>
