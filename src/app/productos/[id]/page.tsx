@@ -6,10 +6,14 @@ import { getProductByIdFromDB } from "@/lib/supabase"
 import { notFound } from "next/navigation"
 
 // Definición de la interfaz para las props de la página
+// Usamos Partial<PageProps> para ser más flexibles con Next.js 15
 interface ProductDetailPageProps {
   params: {
     id: string
   }
+  // Next.js 15 puede pasar otras props como searchParams, etc.
+  // Aunque no las usemos, es bueno tenerlas en cuenta para la compatibilidad de tipos.
+  searchParams?: { [key: string]: string | string[] | undefined }
 }
 
 // La función de la página debe ser asíncrona
@@ -30,7 +34,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     remeras: "Remeras",
     buzos: "Buzos",
     pantalones: "Pantalones",
-  }
+  } as const; // 'as const' para asegurar que los tipos sean literales
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -79,10 +83,23 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               </div>
             )}
 
+            <div className="space-y-4">
+              <button className="w-full bg-gray-900 text-white py-4 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-300 flex items-center justify-center">
+                <ShoppingCart className="h-5 w-5 mr-2" />
+                Agregar al carrito
+              </button>
+
+              <button className="w-full border border-gray-300 text-gray-900 py-4 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center">
+                <Heart className="h-5 w-5 mr-2" />
+                Agregar a favoritos
+              </button>
+            </div>
+
             <div className="border-t pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Información del producto</h3>
               <ul className="space-y-2 text-gray-600">
                 <li>• Material de alta calidad</li>
+                <li>• Envío gratis en compras superiores a $5000</li>
                 <li>• Cambios y devoluciones sin cargo</li>
                 <li>• Garantía de satisfacción</li>
               </ul>
