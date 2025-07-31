@@ -1,39 +1,25 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft } from 'lucide-react' // Se eliminaron ShoppingCart y Heart
+import { ArrowLeft } from 'lucide-react'
 import Navigation from "@/components/navigation"
-import { getProductByIdFromDB } from "@/lib/supabase" // Asegúrate de que esta ruta sea correcta
+import { getProductByIdFromDB } from "@/lib/supabase"
 import { notFound } from "next/navigation"
 
-// Definimos la interfaz de las props de la página de forma explícita
-// Esto es lo que Next.js App Router espera para rutas dinámicas
-interface ProductPageProps {
-  params: {
-    id: string;
-  };
-  // Next.js también puede pasar searchParams, aunque no los usemos aquí
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-// La función de la página debe ser asíncrona
-export default async function ProductDetailPage({ params }: ProductPageProps) {
-  // Obtener el ID del producto de los parámetros
+// ✅ Tipado directo en los parámetros, sin interfaz externa
+export default async function ProductDetailPage({ params }: { params: { id: string } }) {
   const productId = params.id
 
-  // Obtener el producto de la base de datos
   const product = await getProductByIdFromDB(productId)
 
-  // Si el producto no se encuentra, mostrar la página 404
   if (!product) {
     notFound()
   }
 
-  // Mapeo de nombres de categorías para mostrar
   const categoryNames = {
     remeras: "Remeras",
     buzos: "Buzos",
     pantalones: "Pantalones",
-  } as const; // 'as const' para asegurar que los tipos sean literales
+  } as const
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -49,10 +35,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </Link>
 
         <div className="grid md:grid-cols-2 gap-12">
-          {/* Sección de la imagen del producto */}
           <div className="aspect-square overflow-hidden rounded-lg bg-white shadow-sm">
             <Image
-              src={product.image_url || "/placeholder.svg"} // Usar image_url de la DB
+              src={product.image_url || "/placeholder.svg"}
               alt={product.name}
               width={600}
               height={600}
@@ -60,10 +45,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             />
           </div>
 
-          {/* Sección de detalles del producto */}
           <div className="space-y-6">
             <div>
-              <p className="text-sm text-gray-500 mb-2">{categoryNames[product.category as keyof typeof categoryNames]}</p>
+              <p className="text-sm text-gray-500 mb-2">
+                {categoryNames[product.category as keyof typeof categoryNames]}
+              </p>
               <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
               <p className="text-3xl font-bold text-gray-900">${product.price.toLocaleString()}</p>
             </div>
@@ -82,13 +68,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </div>
             )}
 
-            {/* Los botones de carrito y favoritos han sido eliminados */}
-
             <div className="border-t pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Información del producto</h3>
               <ul className="space-y-2 text-gray-600">
                 <li>• Material de alta calidad</li>
-                {/* La línea de envío gratis ha sido eliminada */}
                 <li>• Cambios y devoluciones sin cargo</li>
                 <li>• Garantía de satisfacción</li>
               </ul>
