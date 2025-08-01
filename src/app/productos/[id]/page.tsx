@@ -1,15 +1,19 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ShoppingCart, Heart } from 'lucide-react'
 import Navigation from "@/components/navigation"
-import { getProductByIdFromDB } from "@/lib/supabase"
+import { getProductById } from "@/lib/products"
 import { notFound } from "next/navigation"
 
-// ✅ Tipado directo en los parámetros, sin interfaz externa
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const productId = params.id
+interface ProductDetailPageProps {
+  params: Promise<{
+    id: string
+  }>
+}
 
-  const product = await getProductByIdFromDB(productId)
+export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+  const { id } = await params
+  const product = getProductById(id)
 
   if (!product) {
     notFound()
@@ -19,7 +23,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
     remeras: "Remeras",
     buzos: "Buzos",
     pantalones: "Pantalones",
-  } as const
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -37,7 +41,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
         <div className="grid md:grid-cols-2 gap-12">
           <div className="aspect-square overflow-hidden rounded-lg bg-white shadow-sm">
             <Image
-              src={product.image_url || "/placeholder.svg"}
+              src={product.image || "/placeholder.svg"}
               alt={product.name}
               width={600}
               height={600}
@@ -47,9 +51,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
           <div className="space-y-6">
             <div>
-              <p className="text-sm text-gray-500 mb-2">
-                {categoryNames[product.category as keyof typeof categoryNames]}
-              </p>
+              <p className="text-sm text-gray-500 mb-2">{categoryNames[product.category]}</p>
               <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
               <p className="text-3xl font-bold text-gray-900">${product.price.toLocaleString()}</p>
             </div>

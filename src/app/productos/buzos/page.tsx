@@ -1,9 +1,8 @@
 import Navigation from "@/components/navigation"
 import ProductCard from "@/components/product-card"
-import { getProductsByCategoryFromDB } from "@/lib/supabase" // Importa desde supabase.ts
-
-export default async function BuzosPage() { // Hacerla async
-  const buzos = await getProductsByCategoryFromDB("buzos") // Obtener productos de la DB
+import { getProductsByCategory } from "@/lib/products"
+export default function BuzosPage() {
+  const buzos = getProductsByCategory("buzos")
 
   return (
     <div className="min-h-screen bg-gray-50">

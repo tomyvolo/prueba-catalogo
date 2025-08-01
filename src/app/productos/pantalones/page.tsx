@@ -1,9 +1,9 @@
 import Navigation from "@/components/navigation"
 import ProductCard from "@/components/product-card"
-import { getProductsByCategoryFromDB } from "@/lib/supabase" // Importa desde supabase.ts
+import { getProductsByCategory } from "@/lib/products"
 
-export default async function PantalonesPage() { // Hacerla async
-  const pantalones = await getProductsByCategoryFromDB("pantalones") // Obtener productos de la DB
+export default function PantalonesPage() {
+  const pantalones = getProductsByCategory("pantalones")
 
   return (
     <div className="min-h-screen bg-gray-50">
